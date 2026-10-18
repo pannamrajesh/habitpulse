@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#0a0f1e"><link rel="icon" href="icon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="icon.svg">
+<title>Habit Tracker</title>
+<style>
+:root{--bg:#0a0f1e;--card:#121a30;--ink:#eaf0ff;--mut:#8d9ab8;--line:#23304f;--glow:#1b2c5c;--grn:#34d399;--yel:#fbbf24;--red:#fb7185;--cy:#22d3ee;--pu:#818cf8;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:light){:root:not([data-theme]){--bg:#f2f5fb;--card:#fff;--ink:#14203a;--mut:#5b6a86;--line:#dde3ef;--glow:#dbe6ff}}
+:root[data-theme="light"]{--bg:#f2f5fb;--card:#fff;--ink:#14203a;--mut:#5b6a86;--line:#dde3ef;--glow:#dbe6ff}
+
+:root[data-theme="black"]{--bg:#000;--card:#0d0d0d;--ink:#fff;--mut:#9a9a9a;--line:#2a2a2a;--glow:#1c1c1c}
+:root[data-theme="white"]{--bg:#fff;--card:#fff;--ink:#000;--mut:#555;--line:#d6d6d6;--glow:#f1f1f1}
+:root[data-theme="ocean"]{--bg:#04202e;--card:#08334a;--ink:#e6f7ff;--mut:#8fc1d6;--line:#12506d;--glow:#0b5d80}
+:root[data-theme="forest"]{--bg:#07160f;--card:#0e2619;--ink:#e8fff1;--mut:#8fbfa3;--line:#1d4a31;--glow:#14533a}
+:root[data-theme="purple"]{--bg:#140a24;--card:#21143b;--ink:#f3eaff;--mut:#b19ad6;--line:#3a2766;--glow:#4a2a8a}
+:root[data-theme="sunset"]{--bg:#1f0d0a;--card:#331814;--ink:#fff0ea;--mut:#d6a99c;--line:#5a2c24;--glow:#7a2f1a}
+:root[data-theme="white"] .c,:root[data-theme="light"] .c{box-shadow:0 4px 16px rgba(20,32,58,.08)}
+.sw{display:flex;gap:7px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:6px 10px}
+.sw button{width:22px;height:22px;border-radius:50%;border:2px solid var(--line);cursor:pointer;padding:0}.sw button.act{outline:2px solid var(--ink);outline-offset:2px}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;color:var(--ink);background:radial-gradient(1400px 520px at 8% -8%,var(--glow),transparent),var(--bg);font:14px/1.5 "Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif}
+.w{width:100%;max-width:1840px;margin:0 auto;padding:20px clamp(12px,2.5vw,40px) 40px}
+.bar{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:18px}
+.brand{font-size:22px;font-weight:800;letter-spacing:-.02em}.brand span{color:var(--cy)}
+.nav{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:4px}
+.nav b{min-width:140px;text-align:center}
+button{font:inherit;color:inherit}
+.nb{border:0;background:var(--line);width:34px;height:34px;border-radius:50%;cursor:pointer;color:var(--ink)}
+.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}
+.c{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;min-width:0;box-shadow:0 8px 24px rgba(0,0,0,.12)}
+.s3{grid-column:span 3}.s4{grid-column:span 4}.s5{grid-column:span 5}.s6{grid-column:span 6}.s7{grid-column:span 7}.s12{grid-column:span 12}
+@media(max-width:1100px){.s3,.s4,.s5,.s6,.s7{grid-column:span 6}}@media(max-width:700px){.s3,.s4,.s5,.s6,.s7{grid-column:span 12}}
+.l{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--mut);font-weight:600}
+.k{font-size:40px;font-weight:800;line-height:1.1;margin:4px 0}.sub{color:var(--mut);font-size:12px}
+h2{font-size:15px;margin:0 0 4px}.sc{overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:900px}
+th,td{font-size:11px;text-align:center;padding:4px 1px}th{color:var(--mut);font-weight:600}th.td{color:var(--cy)}
+td.h{text-align:left;white-space:nowrap;font-size:13px;padding-right:12px}td.h i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:8px}
+.b{width:22px;height:22px;margin:auto;display:block;border:1.5px dashed var(--line);border-radius:6px;background:transparent;padding:0;cursor:pointer;color:#06231a;font-weight:800;font-size:12px}
+button.b:hover{border-color:var(--ink)}.b.on{border-style:solid;border-color:transparent}.b.fut{opacity:.3;cursor:default;border-style:dotted}
+.b.lk{cursor:not-allowed;opacity:.45;border-style:dashed}.b.lk.on{opacity:.75;border-style:solid}td.tdc{background:rgba(34,211,238,.10)}
+[hidden]{display:none!important}.in{background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:8px 10px;font:inherit}.x{background:none;border:0;color:var(--mut);cursor:pointer;margin-left:6px;font-size:12px;padding:0 4px}.x:hover{color:var(--red)}
+.bar2{height:8px;background:var(--line);border-radius:99px;overflow:hidden;min-width:70px}.bar2 i{display:block;height:100%;border-radius:99px}
+.tp{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+.tb{border:1.5px solid var(--line);background:transparent;border-radius:999px;padding:9px 16px;cursor:pointer;font-weight:600;color:var(--ink)}.tb.on{color:#06231a;border-color:transparent}
+.pie{display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin-top:8px}.pie svg{width:150px;height:150px;flex:none}
+.lg div{display:flex;align-items:center;gap:8px;font-size:12px;margin:4px 0}.lg i{width:10px;height:10px;border-radius:3px;flex:none}.lg b{margin-left:auto;padding-left:12px}
+.rk{display:grid;grid-template-columns:1fr auto;gap:2px 10px;align-items:center;margin:11px 0}.rk .bar2{grid-column:1/3}
+.bd{font-size:10px;font-weight:800;padding:2px 9px;border-radius:99px;color:#111}
+.pj{display:grid;grid-template-columns:130px 1fr 44px;gap:10px;align-items:center;font-size:12px;margin:9px 0}
+.cols{display:flex;gap:10px;align-items:flex-end;height:120px;margin-top:12px}.cols div{flex:1;text-align:center;font-size:11px;color:var(--mut)}.cols i{display:block;border-radius:6px 6px 0 0;margin-bottom:4px;min-height:2px}
+ul{margin:8px 0 0;padding-left:18px}li{margin:7px 0}.gs h2{color:var(--grn)}.gw h2{color:var(--red)}.gi h2{color:var(--yel)}
+button.rs{background:var(--line);border:0;border-radius:8px;padding:6px 12px;cursor:pointer;color:var(--ink);font-size:12px;margin-left:10px}
+.em{color:var(--mut);padding:24px 0;text-align:center}
+</style></head><body><div class="w">
+<div class="bar"><div class="brand">Habit<span>Pulse</span> <span class="sub" style="font-weight:400;color:var(--mut)">Monthly Dashboard</span></div>
+<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><div class="sw" id="sw" role="group" aria-label="Colour theme"></div><button class="nb" id="theme" aria-label="Switch dark/light mode" title="Switch dark/light mode" style="border:1px solid var(--line);background:var(--card);font-size:16px">🌙</button><div class="nav"><button class="nb" id="prev" aria-label="Previous month">◀</button><b id="mon"></b><button class="nb" id="next" aria-label="Next month">▶</button></div></div></div>
+<div class="grid">
+<div class="c s3"><div class="l">Success rate</div><div class="k" id="k1">–</div><div class="sub" id="k1s"></div></div>
+<div class="c s3"><div class="l" id="k2l">Strong days</div><div class="k" id="k2">–</div><div class="sub" id="k2s"></div></div>
+<div class="c s3"><div class="l">Discipline streak</div><div class="k" id="k3">–</div><div class="sub" id="k3s"></div></div>
+<div class="c s3"><div class="l">7-day momentum</div><div class="k" id="k4">–</div><div class="sub" id="k4s"></div></div>
+<div class="c s12" id="todayc"><div class="l">Today's check-in</div><div class="tp" id="today"></div></div>
+<div class="c s12" id="reminder-card"><div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap"><div><h2>Hourly progress notifications</h2><div class="sub" id="reminder-status">Turn on reminders to get an hourly summary of today’s habits.</div></div><button class="rs" id="reminder-toggle">Enable hourly reminders</button></div></div>
+<div class="c s12"><div style="display:flex;justify-content:space-between;flex-wrap:wrap"><h2>Monthly tracker <span class="sub" id="hint"></span></h2><span><span class="sub" id="err"></span><button class="rs" id="addb" style="margin:0">＋ Add task</button></span></div><div id="addp" hidden style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:10px 0;padding:12px;border:1px dashed var(--line);border-radius:12px"><input id="tn" class="in" maxlength="40" placeholder="New task, e.g. Drink 3 litres of water" aria-label="Task name" style="flex:1;min-width:200px"><select id="tf" class="in" aria-label="Frequency"><option value="d">Every day</option><option value="w">Days per week</option></select><select id="tw" class="in" style="display:none" aria-label="Days per week"><option value="1">1 days / week</option><option value="2">2 days / week</option><option value="3" selected>3 days / week</option><option value="4">4 days / week</option><option value="5">5 days / week</option><option value="6">6 days / week</option></select><button class="rs" id="tadd" style="margin:0;background:var(--cy);color:#06231a;font-weight:700">Add</button><button class="rs" id="tcan" style="margin:0">Cancel</button><span class="sub" id="terr" style="color:var(--red)"></span></div>
+<div class="sc"><table id="gr"></table></div></div>
+<div class="c s7"><h2>Daily completion trend</h2><div class="sub" id="trs"></div><svg id="ln" viewBox="0 0 800 210" width="100%" role="img" aria-label="Daily completion trend"></svg></div>
+<div class="c s5"><h2>Discipline risk analysis</h2><div class="sub">How likely you are to lose the month if the pattern continues</div><div id="gauge" style="text-align:center"></div><div id="proj"></div></div>
+<div class="c s4"><h2>💪 Strength map</h2><div class="sub">Share of all your completed ticks</div><div class="pie" id="p1"></div></div>
+<div class="c s4"><h2>⚠️ Weakness map</h2><div class="sub">Share of all your missed ticks</div><div class="pie" id="p2"></div></div>
+<div class="c s4"><h2>🚨 Habit risk levels</h2><div class="sub">Based on rate, last 7 days and miss streak</div><div id="rk"></div></div>
+<div class="c s6"><h2 id="wkt"></h2><div class="sub" id="wks"></div><div class="cols" id="wk"></div></div>
+<div class="c s6"><h2>Completion by weekday</h2><div class="sub">Find your weakest day</div><div class="cols" id="wd"></div></div>
+<div class="c s4 gs"><h2>Strengths</h2><ul id="st"></ul></div>
+<div class="c s4 gw"><h2>Weaknesses</h2><ul id="we"></ul></div>
+<div class="c s4 gi"><h2>Focus on improving</h2><ul id="im"></ul></div>
+<div class="c s12"><h2>💾 Your data (JSON file)</h2><div class="sub">Link a <b>.json file on your computer</b> and every tick is written to it automatically. A copy also stays in this browser.</div>
+<div style="margin-top:10px"><button class="rs" id="fcr" style="margin:0 8px 0 0">🔗 Create data file</button><button class="rs" id="fop" style="margin:0 8px 0 0">📂 Open existing data file</button><button class="rs" id="frc" style="margin:0 8px 0 0;display:none"></button><span class="sub" id="fst">Not linked to a file yet.</span></div>
+<div class="sub" style="margin-top:12px">Manual backup:</div>
+<div style="margin-top:10px"><button class="rs" id="ex" style="margin:0 8px 0 0">⬇ Export JSON file</button><label class="rs" style="cursor:pointer;display:inline-block">⬆ Import JSON file<input id="im2" type="file" accept=".json,application/json" hidden></label><span class="sub" id="dmsg" style="margin-left:10px"></span></div>
+<details id="jd" style="margin-top:10px"><summary class="sub" style="cursor:pointer">Show / paste JSON text</summary><textarea id="jt" spellcheck="false" style="width:100%;height:140px;margin-top:8px;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:8px;font:12px monospace"></textarea><button class="rs" id="ld" style="margin:8px 0 0">Load from text</button></details></div>
+</div></div>
+<script>
+const HD=[{k:'ready',wk:7,n:'Read & meditate',full:'Read & meditate (20 min, morning)',col:'#34d399',tip:'Keep your book and meditation spot ready the night before and do it right after waking, before your phone. Even 10 minutes counts on tough days.'},
+{k:'bath',wk:7,n:'Afternoon bath',full:'Afternoon bath',col:'#22d3ee',tip:'Anchor it to a trigger (right after lunch or coming home) and set a daily reminder.'},
+{k:'learn',wk:7,n:'Learning 3 hrs',full:'Learning 3 hours',col:'#818cf8',tip:'Split into 3 one-hour blocks so one missed slot does not sink the day.'},
+{k:'gym',wk:5,n:'Gym 5x/week',full:'Gym (5 days / week)',col:'#fb7185',tip:'Pre-schedule the 5 gym days on your calendar and keep a 20-minute home workout as a fallback.'},
+{k:'protein',wk:7,n:'Protein food',full:'Protein food',col:'#fbbf24',tip:'Prep protein in bulk (eggs, dal, paneer, chicken, curd) and keep a backup like whey or roasted chana.'}];
+const PAL=['#f97316','#e879f9','#a3e635','#38bdf8','#f43f5e','#2dd4bf','#facc15','#c084fc'],TIP='Attach it to a daily trigger, set a reminder, and start with a version so small you cannot skip it.';let RMK=null;
+function cleanH(x){if(!x||typeof x.k!=='string'||!/^[\w-]{1,24}$/.test(x.k)||typeof x.n!=='string')return null;const n=x.n.replace(/[<>"'`]/g,'').trim().slice(0,40);if(!n)return null;
+return{k:x.k,n,full:String(x.full||n).replace(/[<>"'`]/g,'').slice(0,70),col:/^#[0-9a-f]{3,8}$/i.test(x.col)?x.col:PAL[0],wk:Math.min(7,Math.max(1,Math.round(+x.wk)||7)),tip:String(x.tip||TIP).replace(/[<>"'`]/g,'').slice(0,300)}}
+let H=HD;try{const c=JSON.parse(localStorage.getItem('habit-config')||'null');if(Array.isArray(c)){const v=c.map(cleanH).filter(Boolean);if(v.length)H=v}}catch(e){}
+function saveCfg(){if(typeof secureSave==='function')secureSave();if(typeof fileSave==='function')fileSave()}
+function mergeCfg(a){if(!Array.isArray(a))return;let ch=false;a.forEach(x=>{const h=cleanH(x);if(h&&!H.some(y=>y.k==h.k)&&H.length<12){H.push(h);ch=true}});if(ch)saveCfg()}
+const DN=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],$=id=>document.getElementById(id);
+const KEY='habit-tracker-v1';let DB={};try{DB=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){}
+function save(){if(typeof secureSave==='function')secureSave();if(typeof fileSave==='function')fileSave()}
+let T=new Date(),Y=T.getFullYear(),M=T.getMonth(),LOCK=true;
+function canEdit(d){const ty=T.getFullYear()*12+T.getMonth(),cy=Y*12+M;return cy==ty?(d==T.getDate()||(!LOCK&&d<T.getDate())):cy<ty?!LOCK:false}const mk=()=>Y+'-'+String(M+1).padStart(2,'0');
+const lv=r=>r<25?['LOW','var(--grn)']:r<50?['MEDIUM','var(--yel)']:['HIGH','var(--red)'];
+function streaks(a){let b=0,c=0;a.forEach(x=>{c=x?c+1:0;b=Math.max(b,c)});return{best:b,cur:c}}
+function pie(el,items,msg){const tot=items.reduce((s,x)=>s+x.v,0);if(!tot){el.innerHTML='<div class="em">'+msg+'</div>';return}
+const R=52,C=2*Math.PI*R;let off=0,g='';items.forEach(x=>{if(!x.v)return;const l=C*x.v/tot;g+=`<circle cx="75" cy="75" r="${R}" fill="none" stroke="${x.col}" stroke-width="24" stroke-dasharray="${l} ${C-l}" stroke-dashoffset="${-off}" transform="rotate(-90 75 75)"/>`;off+=l});
+el.innerHTML=`<svg viewBox="0 0 150 150"><circle cx="75" cy="75" r="${R}" fill="none" stroke="var(--line)" stroke-width="24"/>${g}<text x="75" y="73" text-anchor="middle" fill="var(--ink)" font-size="20" font-weight="800">${tot}</text><text x="75" y="89" text-anchor="middle" fill="var(--mut)" font-size="9">TOTAL</text></svg><div class="lg" style="flex:1;min-width:130px">${items.map(x=>`<div><i style="background:${x.col}"></i>${x.n}<b>${Math.round(x.v/tot*100)}%</b></div>`).join('')}</div>`}
+function render(){
+T=new Date();
+const dim=new Date(Date.UTC(Y,M+1,0)).getUTCDate(),ty=T.getFullYear()*12+T.getMonth(),cy=Y*12+M,n=cy<ty?dim:cy==ty?T.getDate():0,mdb=DB[mk()]||{};
+$('hint').textContent='— only today’s column can be ticked';$('mon').textContent=new Date(Date.UTC(Y,M,1)).toLocaleString('en',{month:'long',year:'numeric',timeZone:'UTC'});
+const rows=Array.from({length:n},(_,i)=>{const o={d:new Date(Date.UTC(Y,M,i+1)),done:{}};H.forEach(h=>o.done[h.k]=(mdb[h.k]||[]).includes(i+1));return o});
+const st=H.map(h=>{const a=rows.map(r=>r.done[h.k]),done=a.filter(Boolean).length,goal=h.wk<7?Math.round(n*h.wk/7):n,gf=h.wk<7?Math.round(dim*h.wk/7):dim,l7=a.slice(-7),d7=l7.filter(Boolean).length,g7=h.wk<7?Math.round(l7.length*h.wk/7):l7.length;
+let miss=0;for(let i=a.length-1;i>=0&&!a[i];i--)miss++;if(h.wk<7)miss=Math.max(0,miss-(7-h.wk));
+const pct=goal?Math.min(100,done/goal*100):0,p7=g7?Math.min(100,d7/g7*100):0,risk=n?Math.min(100,.5*(100-pct)+.4*(100-p7)+3*miss):0;return{...h,a,done,goal,gf,pct,p7,miss,risk,...streaks(a)}});
+const sg=st.reduce((s,x)=>s+x.goal,0),sd=st.reduce((s,x)=>s+Math.min(x.done,x.goal),0),rate=sg?sd/sg*100:0,cnt=rows.map(r=>H.filter(h=>r.done[h.k]).length);
+// grid
+let t='<tr><th style="text-align:left">HABIT</th><th>GOAL</th>';for(let d=1;d<=dim;d++){const w=DN[new Date(Date.UTC(Y,M,d)).getUTCDay()];t+=`<th class="${cy==ty&&d==T.getDate()?'td':''}">${d}<br>${w[0]}</th>`}t+='<th style="text-align:left;padding-left:12px">PROGRESS</th></tr>';
+st.forEach(s=>{t+=`<tr><td class="h"><i style="background:${s.col}"></i>${s.full}<button class="x" data-rm="${s.k}" title="Remove this task" aria-label="Remove ${s.n}">${RMK==s.k?'Remove?':'×'}</button></td><td>${s.goal}</td>`;for(let d=1;d<=dim;d++){const i=d-1;const tc=cy==ty&&d==T.getDate()?' tdc':'';t+=i<n?(canEdit(d)?`<td class="${tc}"><button class="b ${s.a[i]?'on':''}" data-h="${s.k}" data-d="${d}" aria-pressed="${!!s.a[i]}" aria-label="${s.n} day ${d}" style="${s.a[i]?'background:'+s.col:''}">${s.a[i]?'✓':''}</button></td>`:`<td class="${tc}"><div class="b lk ${s.a[i]?'on':''}" title="Locked: only today can be edited" style="${s.a[i]?'background:'+s.col:''}">${s.a[i]?'✓':''}</div></td>`):'<td><div class="b fut"></div></td>'}
+t+=`<td style="text-align:left;padding-left:12px;white-space:nowrap"><div style="display:flex;gap:8px;align-items:center"><div class="bar2" style="width:90px"><i style="width:${s.pct}%;background:${s.col}"></i></div><b>${Math.round(s.pct)}%</b></div></td></tr>`});
+t+=`<tr><td class="h l">Done per day</td><td></td>`+Array.from({length:dim},(_,i)=>`<td style="color:var(--grn);font-weight:700">${i<n?cnt[i]:''}</td>`).join('')+`<td style="text-align:left;padding-left:12px"><b>${cnt.reduce((a,b)=>a+b,0)}/${n*H.length}</b></td></tr>`;$('gr').innerHTML=t;
+// today strip
+$('todayc').style.display=cy==ty?'':'none';$('today').innerHTML=st.map(s=>`<button class="tb ${s.a[n-1]?'on':''}" data-h="${s.k}" data-d="${n}" style="${s.a[n-1]?'background:'+s.col:''}">${s.a[n-1]?'✓ ':''}${s.n}</button>`).join('');
+const ids=['k1','k2','k3','k4','k1s','k2s','k4s','ln','gauge','proj','p1','p2','rk','wk','wd','st','we','im'];
+if(!n){ids.forEach(k=>$(k).innerHTML=k[0]=='k'&&k.length==2?'–':'');$('im').innerHTML='<li>This month has not started yet.</li>';return}
+const NH=H.length,thr=Math.ceil(NH*.8);const mo=a=>a.length?a.reduce((x,y)=>x+y,0)/(a.length*NH)*100:0,last=cnt.slice(-7),prev=cnt.slice(-14,-7),strong=cnt.filter(c=>c>=thr).length;let sk=0;for(let i=n-1;i>=0&&cnt[i]>=thr;i--)sk++;
+$('k1').textContent=Math.round(rate)+'%';$('k1').style.color=rate>=70?'var(--grn)':rate>=50?'var(--yel)':'var(--red)';$('k1s').textContent=rate>=85?'Excellent':rate>=70?'Good job':rate>=50?'Keep pushing':'Needs focus';
+$('k2').textContent=strong+'/'+n;$('k2l').textContent='Strong days ('+thr+'+ habits)';$('k3s').textContent='Consecutive days with '+thr+'+ habits';$('trs').textContent='Habits completed per day (out of '+NH+')';$('k2s').textContent=Math.round(strong/n*100)+'% of tracked days';$('k3').textContent=sk+(sk==1?' day':' days');
+const dl=prev.length?mo(last)-mo(prev):null;$('k4').textContent=Math.round(mo(last))+'%';$('k4s').textContent=dl==null?'Not enough data to compare':(dl>=0?'▲ +':'▼ ')+Math.round(dl)+' pts vs previous 7 days';$('k4s').style.color=dl==null?'':dl>=0?'var(--grn)':'var(--red)';
+// trend
+const X=i=>30+i*(750/Math.max(1,dim-1)),Yy=v=>180-v*150/NH;let g='';for(let v=0;v<=NH;v++)g+=`<line x1="30" x2="780" y1="${Yy(v)}" y2="${Yy(v)}" stroke="var(--line)"/><text x="8" y="${Yy(v)+4}" font-size="10" fill="var(--mut)">${v}</text>`;
+const pts=cnt.map((v,i)=>[X(i),Yy(v)]),pl=pts.map(p=>p.join(',')).join(' ');g+=`<polygon points="${X(0)},180 ${pl} ${X(n-1)},180" fill="var(--cy)" opacity=".12"/><polyline fill="none" stroke="var(--cy)" stroke-width="3" stroke-linejoin="round" points="${pl}"/>`+pts.map((p,i)=>`<circle cx="${p[0]}" cy="${p[1]}" r="3.5" fill="var(--cy)"/><text x="${p[0]}" y="${p[1]-9}" font-size="10" text-anchor="middle" fill="var(--ink)">${cnt[i]}</text>`).join('')+Array.from({length:dim},(_,i)=>(i+1)%5==0||i==0?`<text x="${X(i)}" y="202" font-size="10" text-anchor="middle" fill="var(--mut)">${i+1}</text>`:'').join('');$('ln').innerHTML=g;
+// risk gauge + projection
+const risk=st.reduce((s,x)=>s+x.risk,0)/NH,[rl,rc]=lv(risk),A=Math.PI*70;
+$('gauge').innerHTML=`<svg viewBox="0 0 160 100" style="width:240px;max-width:100%"><path d="M10 85 A70 70 0 0 1 150 85" fill="none" stroke="var(--line)" stroke-width="16" stroke-linecap="round"/><path d="M10 85 A70 70 0 0 1 150 85" fill="none" stroke="${rc}" stroke-width="16" stroke-linecap="round" stroke-dasharray="${A*risk/100} ${A}"/><text x="80" y="72" text-anchor="middle" fill="var(--ink)" font-size="26" font-weight="800">${Math.round(risk)}</text><text x="80" y="92" text-anchor="middle" fill="${rc}" font-size="11" font-weight="800">${rl} RISK</text></svg>`;
+const rem=dim-n,gF=st.reduce((s,x)=>s+x.gf,0),stop=st.reduce((s,x)=>s+Math.min(x.done,x.gf),0)/gF*100,pace=st.reduce((s,x)=>s+Math.min(x.gf,x.done/n*dim),0)/gF*100,best=st.reduce((s,x)=>s+Math.min(x.gf,x.done+rem),0)/gF*100;
+$('proj').innerHTML='<div class="l" style="margin-top:6px">Projected month-end score</div>'+[['If you stop today',stop,'var(--red)'],['At current pace',pace,'var(--yel)'],['Perfect from now',best,'var(--grn)']].map(x=>`<div class="pj"><span>${x[0]}</span><div class="bar2"><i style="width:${x[1]}%;background:${x[2]}"></i></div><b>${Math.round(x[1])}%</b></div>`).join('');
+// pies + risk list
+pie($('p1'),st.map(s=>({n:s.n,v:s.done,col:s.col})),'Tick some habits to see your strengths');
+pie($('p2'),st.map(s=>({n:s.n,v:Math.max(0,s.goal-s.done),col:s.col})),'Nothing missed yet. Great!');
+$('rk').innerHTML=[...st].sort((a,b)=>b.risk-a.risk).map(s=>{const[l,c]=lv(s.risk);return`<div class="rk"><b>${s.n}</b><span class="bd" style="background:${c}">${l}</span><div class="bar2"><i style="width:${s.risk}%;background:${c}"></i></div><span class="sub" style="grid-column:1/3">Rate ${Math.round(s.pct)}% · last 7 days ${Math.round(s.p7)}% · missed in a row: ${s.miss}</span></div>`}).join('');
+// gym weekly + weekday
+const WH=H.find(h=>h.wk<7);$('wkt').textContent=WH?WH.n+': days per week':'Weekly goal tasks';$('wks').textContent=WH?'Goal is '+WH.wk+' days (green = goal met)':'';const wkm={};rows.forEach(r=>{const o=(r.d.getUTCDay()+6)%7,k=new Date(r.d-o*864e5).toISOString().slice(5,10);(wkm[k]=wkm[k]||{g:0,n:0});wkm[k].n++;if(WH&&r.done[WH.k])wkm[k].g++});
+const wks=Object.entries(wkm);$('wk').innerHTML=!WH?'<div class="sub">Add a task with a weekly goal (days per week) to see this chart.</div>':wks.map(([k,v])=>`<div><i style="height:${v.g/7*90}px;background:${v.g>=WH.wk?'var(--grn)':v.n<7?'var(--mut)':'var(--red)'}"></i><b style="color:var(--ink)">${v.g}</b><br>wk ${k}</div>`).join('');
+const wd=DN.map((_,w)=>{const rr=rows.filter(r=>r.d.getUTCDay()==w);return{w,p:rr.length?rr.reduce((s,r)=>s+H.filter(h=>r.done[h.k]).length,0)/(rr.length*NH)*100:null}});
+$('wd').innerHTML=wd.map(x=>`<div><i style="height:${(x.p||0)*.9}px;background:var(--pu)"></i><b style="color:var(--ink)">${x.p==null?'–':Math.round(x.p)+'%'}</b><br>${DN[x.w]}</div>`).join('');
+// insights
+const v=wd.filter(x=>x.p!=null),bd=v.reduce((a,b)=>b.p>a.p?b:a),wdy=v.reduce((a,b)=>b.p<a.p?b:a),sorted=[...st].sort((a,b)=>b.pct-a.pct),S=[],W=[],I=[];
+st.filter(s=>s.pct>=80).forEach(s=>S.push(`<b>${s.n}</b>: ${Math.round(s.pct)}% (${s.done}/${s.goal}), best streak ${s.best} days.`));
+if(!S.length)S.push(`Top habit is <b>${sorted[0].n}</b> at ${Math.round(sorted[0].pct)}%. Build from here.`);
+S.push(`Best weekday: <b>${DN[bd.w]}</b> (${Math.round(bd.p)}%).`);if(dl!=null&&dl>0)S.push(`Momentum is rising, up ${Math.round(dl)} points this week.`);
+st.filter(s=>s.pct<70).sort((a,b)=>a.pct-b.pct).forEach(s=>{W.push(`<b>${s.n}</b>: only ${Math.round(s.pct)}% (${s.done}/${s.goal}).`);I.push(`<b>${s.n}:</b> ${s.tip}`)});
+if(!W.length)W.push(`No habit is below 70%. Weakest: <b>${sorted[sorted.length-1].n}</b> at ${Math.round(sorted[sorted.length-1].pct)}%.`),I.push(`Tighten <b>${sorted[sorted.length-1].n}</b>. ${sorted[sorted.length-1].tip}`);
+if(wdy.p<bd.p-10)W.push(`Weakest weekday: <b>${DN[wdy.w]}</b> (${Math.round(wdy.p)}%).`),I.push(`Plan <b>${DN[wdy.w]}</b> the night before: learning slots, gym or rest, and a protein meal.`);
+const full=wks.filter(([k,x])=>x.n>=7),ms=full.filter(([k,x])=>WH&&x.g<WH.wk).length;if(ms)W.push(`${WH.n} target missed in ${ms} of ${full.length} full weeks.`);
+if(dl!=null&&dl<0)W.push(`Momentum dipped ${Math.abs(Math.round(dl))} points vs the previous 7 days.`);
+const top=[...st].sort((a,b)=>b.risk-a.risk)[0];if(top.risk>=25){const f=top.wk<7?top.done/(Math.round((n+3)*top.wk/7)||1):top.done/(n+3);I.push(`Risk alert: skipping <b>${top.n}</b> for 3 more days drops it from ${Math.round(top.pct)}% to about ${Math.round(Math.min(100,f*100))}%.`)}
+I.push('Never miss twice in a row: one slip is fine, two becomes a pattern.');
+$('st').innerHTML=S.map(x=>`<li>${x}</li>`).join('');$('we').innerHTML=W.map(x=>`<li>${x}</li>`).join('');$('im').innerHTML=I.map(x=>`<li>${x}</li>`).join('')}
+document.addEventListener('click',e=>{const b=e.target.closest('button[data-h]');if(!b)return;const k=b.dataset.h,d=+b.dataset.d;if(!canEdit(d))return;const m=DB[mk()]=DB[mk()]||{},a=m[k]=m[k]||[],i=a.indexOf(d);i<0?a.push(d):a.splice(i,1);save();render()});
+$('prev').onclick=()=>{M--;if(M<0){M=11;Y--}render()};$('next').onclick=()=>{M++;if(M>11){M=0;Y++}render()};
+const TK='habit-theme',mq=window.matchMedia('(prefers-color-scheme: light)');
+const TH=[['dark','Dark','#0a0f1e','#22d3ee'],['light','Light','#f2f5fb','#22d3ee'],['black','Black','#000','#fff'],['white','White','#fff','#000'],['ocean','Ocean','#08334a','#38bdf8'],['forest','Forest','#0e2619','#34d399'],['purple','Purple','#21143b','#c084fc'],['sunset','Sunset','#331814','#fb923c']],LT=['light','white'];
+let th=null;try{th=localStorage.getItem(TK)}catch(e){}
+function applyTheme(t){document.documentElement.setAttribute('data-theme',t);$('theme').textContent=LT.includes(t)?'🌙':'☀️';document.querySelectorAll('#sw button').forEach(b=>b.classList.toggle('act',b.dataset.t==t));try{localStorage.setItem(TK,t)}catch(e){}}
+$('sw').innerHTML=TH.map(x=>`<button data-t="${x[0]}" title="${x[1]}" aria-label="${x[1]} theme" style="background:linear-gradient(135deg,${x[2]} 50%,${x[3]} 50%)"></button>`).join('');
+$('sw').onclick=e=>{const b=e.target.closest('button[data-t]');if(b)applyTheme(b.dataset.t)};
+$('theme').onclick=()=>applyTheme(LT.includes(document.documentElement.getAttribute('data-theme'))?'dark':'light');
+applyTheme(TH.some(x=>x[0]==th)?th:(mq.matches?'light':'dark'));
+let DL=null;try{if(window.claude&&claude.use)claude.use('downloads').then(d=>{DL=d}).catch(()=>{})}catch(e){}
+const msg=t=>{$('dmsg').textContent=t};
+function payload(){return JSON.stringify({app:'HabitPulse',version:1,exportedAt:new Date().toISOString(),habits:H,data:DB},null,2)}
+function merge(txt){const o=JSON.parse(txt),src=(o&&o.data)||o;mergeCfg(o&&o.habits);if(!src||typeof src!=='object')throw 'Not a valid habit file.';let c=0;
+Object.keys(src).forEach(m=>{if(!/^\d{4}-\d{2}$/.test(m)||!src[m]||typeof src[m]!=='object')return;DB[m]=DB[m]||{};c++;H.forEach(h=>{const a=src[m][h.k];if(Array.isArray(a))DB[m][h.k]=[...new Set([...(DB[m][h.k]||[]),...a.map(Number).filter(x=>x>=1&&x<=31)])]})});
+if(!c)throw 'No habit data found in this file.';save();render();return c}
+function imp(txt){try{msg('✓ Imported '+merge(txt)+' month(s). Ticks were merged with existing data.')}catch(e){msg('⚠ '+(e.message||e))}}
+$('ex').onclick=()=>{const p=payload();$('jt').value=p;if(!DL){$('jd').open=true;msg('File saving is not available here. Copy the JSON below and keep it in a .json file.');return}
+DL.save({filename:'habit-data-'+new Date().toISOString().slice(0,10)+'.json',data:p}).then(()=>msg('✓ Saved. Keep the file safe.')).catch(e=>{if(e&&e.code=='declined')msg('Save cancelled.');else{$('jd').open=true;msg('Could not save a file. Copy the JSON below instead.')}})};
+$('im2').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>imp(r.result);r.onerror=()=>msg('⚠ Could not read that file.');r.readAsText(f);e.target.value=''};
+$('ld').onclick=()=>imp($('jt').value);
+$('jd').addEventListener('toggle',()=>{if($('jd').open&&!$('jt').value)$('jt').value=payload()});
+let FH=null,RH=null,fT=0;const fst=t=>{$('fst').textContent=t};
+const idb=()=>new Promise((res,rej)=>{const r=indexedDB.open('habit-fs',1);r.onupgradeneeded=()=>r.result.createObjectStore('k');r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)});
+async function idbSet(v){try{const d=await idb();d.transaction('k','readwrite').objectStore('k').put(v,'h')}catch(e){}}
+async function idbGet(){try{const d=await idb();return await new Promise(res=>{const q=d.transaction('k').objectStore('k').get('h');q.onsuccess=()=>res(q.result);q.onerror=()=>res(null)})}catch(e){return null}}
+async function writeFile(){if(!FH)return;try{const w=await FH.createWritable();await w.write(payload());await w.close();fst('● Auto-saving to '+FH.name+' (last saved '+new Date().toLocaleTimeString()+')')}catch(e){fst('⚠ Could not write to the file. Reconnect it or use Export JSON file.')}}
+function fileSave(){clearTimeout(fT);fT=setTimeout(writeFile,300)}
+const PK={types:[{description:'JSON',accept:{'application/json':['.json']}}]},NOFS='Direct file access is not available in this browser or view. Use "Export JSON file" below instead.';
+async function useHandle(h,rd){try{if(h.requestPermission&&await h.requestPermission({mode:'readwrite'})!=='granted'){fst('Permission to edit the file was not given.');return}
+if(rd){const t=await(await h.getFile()).text();if(t.trim())merge(t)}FH=h;RH=null;$('frc').style.display='none';idbSet(h);await writeFile()}catch(e){fst('⚠ '+(typeof e=='string'?e:(e&&e.message)||'Could not use that file.'))}}
+$('fcr').onclick=async()=>{try{if(!window.showSaveFilePicker)throw 0;useHandle(await showSaveFilePicker({suggestedName:'habit-data.json',...PK}),false)}catch(e){if(!(e&&e.name=='AbortError'))fst(NOFS)}};
+$('fop').onclick=async()=>{try{if(!window.showOpenFilePicker)throw 0;const[h]=await showOpenFilePicker(PK);useHandle(h,true)}catch(e){if(!(e&&e.name=='AbortError'))fst(NOFS)}};
+$('frc').onclick=()=>RH&&useHandle(RH,true);
+idbGet().then(h=>{if(h&&h.name&&!FH){RH=h;$('frc').textContent='↻ Reconnect '+h.name;$('frc').style.display='';fst('Click Reconnect to continue saving to your file.')}});
+$('addb').onclick=()=>{$('addp').hidden=!$('addp').hidden;if(!$('addp').hidden)$('tn').focus()};$('tcan').onclick=()=>{$('addp').hidden=true;$('terr').textContent=''};
+$('tf').onchange=()=>{$('tw').style.display=$('tf').value=='w'?'':'none'};
+function addTask(){const n=$('tn').value.replace(/[<>"'`]/g,'').trim().slice(0,40);if(!n){$('terr').textContent='Enter a task name.';return}
+if(H.some(h=>h.n.toLowerCase()==n.toLowerCase())){$('terr').textContent='A task with this name already exists.';return}if(H.length>=12){$('terr').textContent='Maximum 12 tasks.';return}
+const wk=$('tf').value=='w'?+$('tw').value:7;let k;do{k='t'+Math.random().toString(36).slice(2,8)}while(H.some(h=>h.k==k));
+H.push({k,n,full:n+(wk<7?' ('+wk+' days / week)':''),col:PAL.find(c=>!H.some(h=>h.col==c))||PAL[H.length%PAL.length],wk,tip:TIP});saveCfg();$('tn').value='';$('terr').textContent='';$('addp').hidden=true;render()}
+$('tadd').onclick=addTask;$('tn').onkeydown=e=>{if(e.key=='Enter')addTask()};
+document.addEventListener('click',e=>{const b=e.target.closest('button[data-rm]');if(!b)return;const k=b.dataset.rm;if(H.length<=1){$('err').textContent='Keep at least one task. ';return}
+if(RMK==k){H=H.filter(h=>h.k!=k);RMK=null;saveCfg();render()}else{RMK=k;render();setTimeout(()=>{if(RMK==k){RMK=null;render()}},3000)}});
+// Hourly progress notifications. They run while this page is open in a signed-in browser session.
+const REMKEY='habitpulse-hourly-reminders', LASTKEY='habitpulse-last-reminder';
+let reminderOn=false;
+try{reminderOn=localStorage.getItem(REMKEY)==='on'}catch(e){}
+function todayProgress(){
+  const now=new Date(), month=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0'), day=now.getDate(), data=DB[month]||{};
+  const due=H.filter(h=>h.wk===7 || (day%7)<h.wk);
+  const done=due.filter(h=>(data[h.k]||[]).includes(day));
+  const left=due.length-done.length;
+  return {done:done.length,total:due.length,left,names:due.filter(h=>!(data[h.k]||[]).includes(day)).slice(0,3).map(h=>h.n)};
+}
+function reminderStatus(){
+  const el=$('reminder-status'),btn=$('reminder-toggle'); if(!el||!btn)return;
+  btn.textContent=reminderOn?'Turn off hourly reminders':'Enable hourly reminders';
+  el.textContent=reminderOn?'On — a progress update will arrive every hour while HabitPulse is open and notifications are allowed.':'Turn on reminders to get an hourly summary of today’s habits.';
+}
+function sendProgressReminder(){
+  if(!reminderOn || !('Notification' in window) || Notification.permission!=='granted')return;
+  const now=Date.now();let last=0;try{last=Number(localStorage.getItem(LASTKEY)||0)}catch(e){}
+  if(now-last<59*60*1000)return;
+  const p=todayProgress();let body=`${p.done} of ${p.total} habits done today.`;
+  if(p.left)body+=` Next up: ${p.names.join(', ')}${p.left>p.names.length?'…':''}`;
+  else body='All today’s habits are complete. Great work—keep the streak going!';
+  try{new Notification('HabitPulse · hourly progress',{body,tag:'habitpulse-hourly'});localStorage.setItem(LASTKEY,String(now))}catch(e){}
+}
+$('reminder-toggle').onclick=async()=>{
+  if(!reminderOn){
+    if(!('Notification' in window)){$('reminder-status').textContent='This browser does not support desktop notifications. Try Microsoft Edge or Google Chrome.';return}
+    const permission=Notification.permission==='default'?await Notification.requestPermission():Notification.permission;
+    if(permission!=='granted'){$('reminder-status').textContent='Notifications are blocked. Allow them for this page in your browser settings, then try again.';return}
+    reminderOn=true;try{localStorage.setItem(REMKEY,'on');localStorage.setItem(LASTKEY,String(Date.now()))}catch(e){}
+    try{new Notification('HabitPulse reminders are on',{body:'I’ll send a progress update every hour while this page is open.'})}catch(e){}
+  }else{reminderOn=false;try{localStorage.removeItem(REMKEY)}catch(e){}}
+  reminderStatus();
+};
+reminderStatus();setInterval(sendProgressReminder,60*1000);
+// Encrypt the habit database and custom habits at rest with a passphrase-derived AES-GCM key.
+const VAULT='habitpulse-vault-v1';let vaultKey=null,vaultReady=false,saveChain=Promise.resolve();
+const enc=new TextEncoder(),dec=new TextDecoder();
+function b64(bytes){return btoa(String.fromCharCode(...new Uint8Array(bytes)))}
+function un64(s){return Uint8Array.from(atob(s),c=>c.charCodeAt(0))}
+async function deriveVaultKey(pass,salt){const material=await crypto.subtle.importKey('raw',enc.encode(pass),'PBKDF2',false,['deriveKey']);return crypto.subtle.deriveKey({name:'PBKDF2',salt,iterations:310000,hash:'SHA-256'},material,{name:'AES-GCM',length:256},false,['encrypt','decrypt'])}
+async function sealVault(data,key=vaultKey){const iv=crypto.getRandomValues(new Uint8Array(12));const cipher=await crypto.subtle.encrypt({name:'AES-GCM',iv},key,enc.encode(JSON.stringify(data)));return JSON.stringify({v:1,iv:b64(iv),cipher:b64(cipher)})}
+async function secureSave(){if(!vaultReady||!vaultKey)return;const snap={habits:H,data:DB};saveChain=saveChain.then(async()=>{const packed=await sealVault(snap);const box=JSON.parse(packed);const prior=JSON.parse(localStorage.getItem(VAULT));box.salt=prior.salt;localStorage.setItem(VAULT,JSON.stringify(box));localStorage.removeItem(KEY);localStorage.removeItem('habit-config')}).catch(()=>{$('err').textContent='Encrypted save failed. Check browser storage space.'})}
+function vaultScreen(mode){document.querySelector('.w').style.visibility='hidden';let panel=document.getElementById('vault-screen');if(!panel){panel=document.createElement('div');panel.id='vault-screen';panel.innerHTML='<div class="c" style="width:min(440px,calc(100vw - 32px));margin:12vh auto;padding:28px"><div class="brand">Habit<span style="color:var(--cy)">Pulse</span></div><h2 id="vault-title" style="margin-top:16px"></h2><p class="sub" id="vault-desc"></p><label class="sub" for="vault-pass">Passphrase</label><input id="vault-pass" class="in" type="password" autocomplete="current-password" style="width:100%;margin:6px 0 12px"><div id="vault-confirm-wrap" hidden><label class="sub" for="vault-confirm">Confirm passphrase</label><input id="vault-confirm" class="in" type="password" autocomplete="new-password" style="width:100%;margin:6px 0 12px"></div><div class="sub" id="vault-error" style="color:var(--red);min-height:22px"></div><button class="rs" id="vault-submit" style="margin:8px 0 0;background:var(--cy);color:#06231a;font-weight:700">Unlock</button></div>';panel.style.cssText='position:fixed;inset:0;z-index:99999;background:var(--bg);overflow:auto;padding:16px';document.body.appendChild(panel)}
+const fresh=mode==='create';panel.querySelector('#vault-title').textContent=fresh?'Protect your HabitPulse data':'Unlock HabitPulse';panel.querySelector('#vault-desc').textContent=fresh?'Choose a passphrase to encrypt your habits on this device. If you forget it, the encrypted data cannot be recovered.':'Your habit data is encrypted. Enter your passphrase to unlock it.';panel.querySelector('#vault-confirm-wrap').hidden=!fresh;panel.querySelector('#vault-pass').value='';panel.querySelector('#vault-confirm').value='';panel.querySelector('#vault-error').textContent='';panel.querySelector('#vault-submit').textContent=fresh?'Encrypt and continue':'Unlock';panel.querySelector('#vault-pass').focus();panel.querySelector('#vault-submit').onclick=async()=>{const pass=panel.querySelector('#vault-pass').value;if(pass.length<4){panel.querySelector('#vault-error').textContent='Use at least 4 characters.';return}try{if(fresh){if(pass!==panel.querySelector('#vault-confirm').value){panel.querySelector('#vault-error').textContent='The passphrases do not match.';return}const salt=crypto.getRandomValues(new Uint8Array(16));vaultKey=await deriveVaultKey(pass,salt);const sealed=await sealVault({habits:H,data:DB});const obj=JSON.parse(sealed);obj.salt=b64(salt);localStorage.setItem(VAULT,JSON.stringify(obj));localStorage.removeItem(KEY);localStorage.removeItem('habit-config')}else{const obj=JSON.parse(localStorage.getItem(VAULT));const salt=un64(obj.salt),iv=un64(obj.iv);vaultKey=await deriveVaultKey(pass,salt);const plain=await crypto.subtle.decrypt({name:'AES-GCM',iv},vaultKey,un64(obj.cipher));const data=JSON.parse(dec.decode(plain));if(!Array.isArray(data.habits)||!data.data||typeof data.data!=='object')throw Error('Invalid vault');H=data.habits;DB=data.data}vaultReady=true;panel.remove();document.querySelector('.w').style.visibility='';render()}catch(e){vaultKey=null;panel.querySelector('#vault-error').textContent=fresh?'Could not create encrypted storage. Check browser support and storage.':'That passphrase did not unlock this data.'}}}
+let vaultExists=false;try{vaultExists=!!localStorage.getItem(VAULT)}catch(e){}
+vaultScreen(vaultExists?'unlock':'create');
+if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./service-worker.js').catch(()=>{}));
+</script></body></html>
